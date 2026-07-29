@@ -8,6 +8,11 @@ class HomePage extends StatelessWidget {
   Widget build(BuildContext context) {
     return MADScaffold(
       titleText: 'Home',
+      body: ListView(
+        children: [
+          
+        ],
+      ),
     );
   }
 }

@@ -3,10 +3,12 @@ import 'package:flutter_application_1/pages/home_page.dart';
 
 class MADScaffold extends StatelessWidget {
   final String titleText;
+  final Widget body;
 
   const MADScaffold({
     super.key,
     required this.titleText,
+    required this.body,
   });
 
   @override
@@ -16,11 +18,7 @@ class MADScaffold extends StatelessWidget {
         title: Text(titleText),
         backgroundColor: Theme.of(context).colorScheme.inversePrimary,
       ),
-      body: ListView(
-        children: [
-
-        ],
-      ),
+      body: body,
       drawer: Drawer(
         child: ListView(
           children: [
