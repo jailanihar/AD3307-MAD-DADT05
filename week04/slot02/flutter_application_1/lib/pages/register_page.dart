@@ -1,6 +1,8 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_application_1/components/mad_scaffold.dart';
 import 'package:flutter_application_1/components/mad_textformfield.dart';
+import 'package:go_router/go_router.dart';
 
 class RegisterPage extends StatefulWidget {
 
@@ -17,6 +19,10 @@ class _RegisterPageState extends State<RegisterPage> {
   final TextEditingController nameController = TextEditingController();
   String _errorText = '';
   final _formKey = GlobalKey<FormState>();
+  final RegExp emailRegex = RegExp(
+    r'^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$',
+  );
+
 
   @override
   Widget build(BuildContext context) {
@@ -30,10 +36,25 @@ class _RegisterPageState extends State<RegisterPage> {
             MADTextformfield(
               labelText: 'Email',
               controller: emailController,
+              validator: (value) {
+                if(value == null || value == '') {
+                  return 'Please fill in email';
+                }
+                if(!emailRegex.hasMatch(value)) {
+                  return 'Invalid Email';
+                }
+                return null;
+              },
             ),
             MADTextformfield(
               labelText: 'Password',
               controller: passwordController,
+              validator: (value) {
+                if(value == null || value == '') {
+                  return 'Please fill in password';
+                }
+                return null;
+              }
             ),
             MADTextformfield(
               labelText: 'Confirm Password',
@@ -67,18 +88,32 @@ class _RegisterPageState extends State<RegisterPage> {
     );
   }
 
-  void _register() {
-    // if(_formKey.currentState!.validate()) {
-    //   print('Error');
-    // }
-    if(passwordController.text != confirmPasswordController.text) {
+  Future<void> _register() async {
+    if(mounted && !_formKey.currentState!.validate()) {
       setState(() {
-        _errorText = 'Passwords are not same';
+        _errorText = 'Failed to register.';
       });
       return;
+    }
+    try {
+      UserCredential user =
+        await FirebaseAuth.instance.createUserWithEmailAndPassword(
+          email: emailController.text,
+          password: passwordController.text,
+        );
+      if(mounted) {
+        context.go('/login');
+      }
+    } on FirebaseAuthException catch (_) {
+      setState(() {
+        _errorText = 'Failed to register. Please make sure the email is not already used';
+      });
     }
   }
 
   void _back() {
+    if(mounted) {
+      context.go('/login');
+    }
   }
 }
