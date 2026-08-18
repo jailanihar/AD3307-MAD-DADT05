@@ -18,6 +18,7 @@ class _RegisterPageState extends State<RegisterPage> {
   final TextEditingController passwordController = TextEditingController();
   final TextEditingController confirmPasswordController = TextEditingController();
   final TextEditingController nameController = TextEditingController();
+  final TextEditingController dobController = TextEditingController();
   String _errorText = '';
   final _formKey = GlobalKey<FormState>();
   final RegExp emailRegex = RegExp(
@@ -73,6 +74,27 @@ class _RegisterPageState extends State<RegisterPage> {
             MADTextformfield(
               labelText: 'Name',
               controller: nameController,
+            ),
+            MADTextformfield(
+              labelText: 'Date of Birth',
+              controller: dobController,
+              suffixIcon: IconButton(
+                icon: const Icon(Icons.calendar_month),
+                onPressed: () {
+                  FocusScope.of(context).requestFocus(FocusNode());
+                  showDatePicker(
+                    context: context,
+                    initialDate: DateTime.now(),
+                    // firstDate: DateTime.now().subtract(const Duration(days: 36500)),
+                    firstDate: DateTime(1900, 1, 1),
+                    lastDate: DateTime.now(),
+                  ).then((selectedDate) {
+                    if(selectedDate != null) {
+                      dobController.text = selectedDate.toIso8601String().split('T')[0]; 
+                    }
+                  });
+                },
+              ),
             ),
             ElevatedButton(
               onPressed: _register,

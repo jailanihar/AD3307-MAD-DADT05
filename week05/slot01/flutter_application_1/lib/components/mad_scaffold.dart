@@ -1,3 +1,4 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_application_1/pages/home_page.dart';
 import 'package:go_router/go_router.dart';
@@ -45,6 +46,18 @@ class MADScaffold extends StatelessWidget {
               title: const Text('MyFirstStatefulPage'),
               onTap:() {
                 context.go('/first-stateful');
+              }
+            ),
+            ListTile(
+              leading: const Icon(Icons.logout),
+              title: const Text('Logout'),
+              onTap:() async {
+                try {
+                  await FirebaseAuth.instance.signOut();
+                  context.go('/login');
+                } on FirebaseAuthException catch (_) {
+                  print('Unable to logout');
+                }
               }
             ),
           ],

@@ -5,6 +5,7 @@ class MADTextformfield extends StatelessWidget {
   final bool obscureText;
   final TextEditingController controller;
   final FormFieldValidator? validator;
+  final Widget? suffixIcon;
   
   const MADTextformfield({
     super.key,
@@ -12,6 +13,7 @@ class MADTextformfield extends StatelessWidget {
     required this.controller,
     this.obscureText = false,
     this.validator,
+    this.suffixIcon,
   });
 
   @override
@@ -41,6 +43,9 @@ class MADTextformfield extends StatelessWidget {
             obscureText: obscureText,
             controller: controller,
             validator: validator,
+            decoration: InputDecoration(
+              suffixIcon: suffixIcon,
+            ),
           ),
         ],
       ),
